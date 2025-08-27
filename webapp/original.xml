@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebDynpro xmlns="http://www.sap.com/wd/webdynpro">
+  <View name="FiscalDataView">
+    <Title>Fiscal Data Overview</Title>
+
+    <!-- Top right action buttons -->
+    <FlowLayout id="topActionsFlow" hAlign="right">
+      <Button id="goButton" text="Go" design="Emphasized" onAction="onGo" />
+      <Button id="hideFilterBarButton" text="Hide Filter Bar" onAction="onHideFilterBar" />
+      <Button id="filtersButton" text="Filters (1)" onAction="onFilters" />
+    </FlowLayout>
+
+    <!-- Filter Bar Section -->
+    <FormContainer id="filterFormContainer" colCount="3">
+        <FormElement id="feFiscalYear">
+            <Label text="Fiscal Year:" labelFor="inputFiscalYear" />
+            <InputField id="inputFiscalYear" value="{/FiscalFilters/FiscalYear}" valueHelpEnabled="true" onValueHelpRequest="onValueHelpRequestFiscalYear" />
+        </FormElement>
+        <FormElement id="feFiscalPeriod">
+            <Label text="Fiscal Period:" labelFor="inputFiscalPeriod" />
+            <InputField id="inputFiscalPeriod" value="{/FiscalFilters/FiscalPeriod}" valueHelpEnabled="true" onValueHelpRequest="onValueHelpRequestFiscalPeriod" />
+        </FormElement>
+        <FormElement id="feFiscalYearPeriod">
+            <Label text="Fiscal Year Period:" labelFor="inputFiscalYearPeriod" />
+            <InputField id="inputFiscalYearPeriod" value="{/FiscalFilters/FiscalYearPeriod}" placeholder="PPP/YYYY" valueHelpEnabled="true" onValueHelpRequest="onValueHelpRequestFiscalYearPeriod" />
+        </FormElement>
+
+        <FormElement id="feFiscalQuarter">
+            <Label text="Fiscal Quarter:" labelFor="inputFiscalQuarter" />
+            <InputField id="inputFiscalQuarter" value="{/FiscalFilters/FiscalQuarter}" placeholder="=1 x" valueHelpEnabled="true" onValueHelpRequest="onValueHelpRequestFiscalQuarter" />
+        </FormElement>
+        <FormElement id="feFiscalYearQuarter">
+            <Label text="Fiscal Year Quarter:" labelFor="inputFiscalYearQuarter" />
+            <InputField id="inputFiscalYearQuarter" value="{/FiscalFilters/FiscalYearQuarter}" placeholder="Q/YYYY" valueHelpEnabled="true" onValueHelpRequest="onValueHelpRequestFiscalYearQuarter" />
+        </FormElement>
+        <FormElement id="feFiscalWeek">
+            <Label text="Fiscal Week:" labelFor="inputFiscalWeek" />
+            <InputField id="inputFiscalWeek" value="{/FiscalFilters/FiscalWeek}" valueHelpEnabled="true" onValueHelpRequest="onValueHelpRequestFiscalWeek" />
+        </FormElement>
+
+        <FormElement id="feFiscalYearWeek">
+            <Label text="Fiscal Year Week:" labelFor="inputFiscalYearWeek" />
+            <InputField id="inputFiscalYearWeek" value="{/FiscalFilters/FiscalYearWeek}" placeholder="WW/YYYY" valueHelpEnabled="true" onValueHelpRequest="onValueHelpRequestFiscalYearWeek" />
+        </FormElement>
+        <FormElement id="feFiscalDayOfYear">
+            <Label text="Fiscal Day Of Year:" labelFor="inputFiscalDayOfYear" />
+            <InputField id="inputFiscalDayOfYear" value="{/FiscalFilters/FiscalDayOfYear}" valueHelpEnabled="true" onValueHelpRequest="onValueHelpRequestFiscalDayOfYear" />
+        </FormElement>
+    </FormContainer>
+
+    <!-- Pin Icon - Visually sits below the filter bar. -->
+    <FlowLayout id="pinIconContainer" hAlign="center" width="100%">
+        <Button id="pinButton" iconSrc="sap_icon/pushpin_standard" tooltip="Pin/Unpin Filter Bar" type="Transparent" onAction="onPinToggle" />
+    </FlowLayout>
+
+    <!-- Vertical separator for spacing -->
+    <VerticalGutter height="10px" />
+
+    <!-- Table Section -->
+    <Table id="fiscalInformationTable" dataSource="{/FiscalInformation}" selectionMode="multi" onLeadSelect="onTableLeadSelect">
+      <Title text="Fiscal Information (5)" />
+      <TableColumn id="selectionCol" width="30px" resizable="false">
+        <CheckBox id="headerCheckbox" checked="{/FiscalInformationSelectedAll}" onToggle="onTableSelectAll" />
+        <template>
+          <CheckBox id="rowCheckbox" checked="{selected}" onToggle="onTableRowSelect" />
+        </template>
+      </TableColumn>
+      <Columns>
+        <TableColumn id="colFiscalYear">
+          <Label text="Fiscal Year" />
+          <template>
+            <TextView text="{FiscalYear}" />
+          </template>
+        </TableColumn>
+        <TableColumn id="colFiscalPeriod">
+          <Label text="Fiscal Period" />
+          <template>
+            <TextView text="{FiscalPeriod}" />
+          </template>
+        </TableColumn>
+        <TableColumn id="colFiscalYearPeriod">
+          <Label text="Fiscal Year Period" />
+          <template>
+            <TextView text="{FiscalYearPeriod}" />
+          </template>
+        </TableColumn>
+        <TableColumn id="colFiscalQuarter">
+          <Label text="Fiscal Quarter" />
+          <template>
+            <TextView text="{FiscalQuarter}" />
+          </template>
+        </TableColumn>
+        <TableColumn id="colFiscalYearQuarter">
+          <Label text="Fiscal Year Q..." />
+          <template>
+            <TextView text="{FiscalYearQuarter}" />
+          </template>
+        </TableColumn>
+        <TableColumn id="colFiscalWeek">
+          <Label text="Fiscal Week" />
+          <template>
+            <TextView text="{FiscalWeek}" />
+          </template>
+        </TableColumn>
+        <TableColumn id="colFiscalYearWeek">
+          <Label text="Fiscal Year We..." />
+          <template>
+            <TextView text="{FiscalYearWeek}" />
+          </template>
+        </TableColumn>
+        <TableColumn id="colFiscalDayOfYear">
+          <Label text="Fiscal Day O..." />
+          <template>
+            <TextView text="{FiscalDayOfYear}" />
+          </template>
+        </TableColumn>
+      </Columns>
+      <Toolbar>
+        <ToolbarControl id="copyIconControl">
+          <Button id="copyButton" iconSrc="sap_icon/copy" tooltip="Copy" type="Transparent" onAction="onTableCopy" />
+        </ToolbarControl>
+        <ToolbarControl id="settingsIconControl">
+          <Button id="settingsButton" iconSrc="sap_icon/settings" tooltip="Settings" type="Transparent" onAction="onTableSettings" />
+        </ToolbarControl>
+        <ToolbarControl id="layoutIconControl">
+          <Button id="layoutButton" iconSrc="sap_icon/grid" tooltip="Table Layout" type="Transparent" onAction="onTableLayout" />
+        </ToolbarControl>
+        <ToolbarControl id="dropdownIconControl">
+          <Button id="dropdownMenuButton" iconSrc="sap_icon/navigation-down-arrow" tooltip="More Actions" type="Transparent" onAction="onTableDropdown" />
+        </ToolbarControl>
+      </Toolbar>
+    </Table>
+  </View>
+  <Controller name="FiscalDataViewController">
+    <Methods>
+      <Method name="onGo" />
+      <Method name="onHideFilterBar" />
+      <Method name="onFilters" />
+      <Method name="onPinToggle" />
+      <Method name="onValueHelpRequestFiscalYear" />
+      <Method name="onValueHelpRequestFiscalPeriod" />
+      <Method name="onValueHelpRequestFiscalYearPeriod" />
+      <Method name="onValueHelpRequestFiscalQuarter" />
+      <Method name="onValueHelpRequestFiscalYearQuarter" />
+      <Method name="onValueHelpRequestFiscalWeek" />
+      <Method name="onValueHelpRequestFiscalYearWeek" />
+      <Method name="onValueHelpRequestFiscalDayOfYear" />
+      <Method name="onTableLeadSelect" />
+      <Method name="onTableSelectAll" />
+      <Method name="onTableRowSelect" />
+      <Method name="onTableCopy" />
+      <Method name="onTableSettings" />
+      <Method name="onTableLayout" />
+      <Method name="onTableDropdown" />
+    </Methods>
+  </Controller>
+</WebDynpro>
